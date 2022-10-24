@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public static Player Instance;
+
     const float SPEED = 15;
     const float TORQUE = 720;
     const float DASH_TIME = 0.5f;
@@ -22,10 +24,16 @@ public class Player : MonoBehaviour
     private bool IsDashing => _dashTime > 0;
     private bool CanDash => _dashCooldown <= 0;
     private bool IsInvincible => _invincibilityTime > 0;
-
+    
     [SerializeField] ParticleSystem _dashParticle;
+    [SerializeField] ParticleSystem _chargedParticle;
     [SerializeField] Color _defaultColor;
     [SerializeField] Color _dashColor;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -33,6 +41,7 @@ public class Player : MonoBehaviour
         _sr = GetComponent<SpriteRenderer>();
     }
 
+    private bool _preCanDash = false;
 
     private void Update()
     {
@@ -54,6 +63,11 @@ public class Player : MonoBehaviour
         //Dash cooldown timer
         if(!IsDashing)
             _dashCooldown -= Time.deltaTime;
+
+        if (CanDash && !_preCanDash)
+            _chargedParticle.Play();
+
+        _preCanDash = CanDash;
     }
 
 
