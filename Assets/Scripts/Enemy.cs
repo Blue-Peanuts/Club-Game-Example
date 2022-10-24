@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    const float SPEED = 7;
+    const float SPEED = 5;
     const float ROTATE_SPEED = 360;
 
     [SerializeField] GameObject _deathParticlePrefab;

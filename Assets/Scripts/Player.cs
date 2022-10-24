@@ -5,11 +5,11 @@ public class Player : MonoBehaviour
     public static Player Instance;
 
     const float SPEED = 15;
-    const float TORQUE = 720;
+    const float TORQUE = 1080;
     const float DASH_TIME = 0.5f;
     const float DASH_SPEED = 2f;
     const float DASH_COOLDOWN = 2;
-    const float INVINCIBILITY_BONUS = 0.2f;
+    const float INVINCIBILITY_BONUS = 0.25f;
 
     private Rigidbody2D _rb2d;
     private SpriteRenderer _sr;
@@ -57,6 +57,7 @@ public class Player : MonoBehaviour
             _dashCooldown = DASH_COOLDOWN;
             _invincibilityTime = DASH_TIME + INVINCIBILITY_BONUS;
             _dashParticle.Play();
+            //Instant steering. For more player control
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, TargetAngle));
         }
         
