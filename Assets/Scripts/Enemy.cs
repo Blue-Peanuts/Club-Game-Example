@@ -28,6 +28,8 @@ public class Enemy : MonoBehaviour
 
     public void Death()
     {
+        GameManager.Instance.HitStop();
+
         Destroy(Instantiate(_deathParticlePrefab, transform.position, Quaternion.identity), 1);
         Destroy(gameObject);
     }
