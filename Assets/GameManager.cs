@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +9,11 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     private float _hitStopTime = 0;
+    private int _score = 0;
+
+    public int Score => _score;
+
+    [SerializeField] private TextMeshProUGUI _scoreText;
 
     void Awake()
     {
@@ -27,5 +33,11 @@ public class GameManager : MonoBehaviour
     public void HitStop()
     {
         _hitStopTime = HIT_STOP_TIME;
+    }
+
+    public void AddScore()
+    {
+        _score++;
+        _scoreText.text = "Score " + _score;
     }
 }

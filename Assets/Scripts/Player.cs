@@ -4,10 +4,10 @@ public class Player : MonoBehaviour
 {
     public static Player Instance;
 
-    const float SPEED = 15;
+    const float SPEED = 10;
     const float TORQUE = 1080;
     const float DASH_TIME = 0.5f;
-    const float DASH_SPEED = 2f;
+    const float DASH_SPEED = 40f;
     const float DASH_COOLDOWN = 2;
     const float INVINCIBILITY_BONUS = 0.25f;
 
@@ -53,12 +53,7 @@ public class Player : MonoBehaviour
         //Start dash if input & cooldown is valid
         if (_dashInput && CanDash)
         {
-            _dashTime = DASH_TIME;
-            _dashCooldown = DASH_COOLDOWN;
-            _invincibilityTime = DASH_TIME + INVINCIBILITY_BONUS;
-            _dashParticle.Play();
-            //Instant steering. For more player control
-            transform.rotation = Quaternion.Euler(new Vector3(0, 0, TargetAngle));
+            Dash();
         }
         
         //Dash cooldown timer
@@ -71,16 +66,23 @@ public class Player : MonoBehaviour
         _preCanDash = CanDash;
     }
 
+    private void Dash()
+    {
+        _dashTime = DASH_TIME;
+        _dashCooldown = DASH_COOLDOWN;
+        _invincibilityTime = DASH_TIME + INVINCIBILITY_BONUS;
+        _dashParticle.Play();
+        //Instant steering. For more player control
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, TargetAngle));
+    }
 
     private void FixedUpdate()
     {
         //Create a quaternion containing target angle, this will be the quaternion value that the player rotate to
         Quaternion targetQuaternion = Quaternion.Euler(new Vector3(0, 0, TargetAngle));
 
-        float torque = IsDashing ? TORQUE / 2 : TORQUE;
-
         //Rotate player towards targetQuaternion with the speed of Torque
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetQuaternion, Time.fixedDeltaTime * torque);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetQuaternion, Time.fixedDeltaTime * TORQUE);
 
         //This if statement prevents player from moving when near pointer
         if (Vector3.Distance(transform.position, MousePosition) > 0.5f || IsDashing)
@@ -90,7 +92,7 @@ public class Player : MonoBehaviour
             //Timer for dashing. Change speed while dashing.
             if (IsDashing)
             {
-                speed *= DASH_SPEED;
+                speed = Mathf.Max(speed, DASH_SPEED * Mathf.Sqrt(_dashTime / DASH_TIME));
             }
 
             _rb2d.velocity = transform.right * speed;
@@ -106,7 +108,10 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (IsInvincible && collision.CompareTag("Enemy"))
+        {
+            Dash();
             collision.GetComponent<Enemy>().Death();
+        }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {

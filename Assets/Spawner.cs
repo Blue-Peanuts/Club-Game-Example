@@ -26,7 +26,7 @@ public class Spawner : MonoBehaviour
     {
         while (true)
         {
-            if (EnemyCount < 5)
+            if (EnemyCount < Mathf.Sqrt(GameManager.Instance.Score * 5) + 5)
                 StartCoroutine(Spawn(_enemy));
 
             yield return new WaitForSeconds(1);
