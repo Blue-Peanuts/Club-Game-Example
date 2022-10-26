@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     const float SPEED = 10;
     const float TORQUE = 1080;
     const float DASH_TIME = 0.5f;
-    const float DASH_SPEED = 40f;
+    const float DASH_SPEED = 50f;
     const float DASH_COOLDOWN = 2;
     const float INVINCIBILITY_BONUS = 0.25f;
 
@@ -45,7 +45,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (IsDashing || CanDash)
+        if (CanDash)
             _sr.color = _dashColor;
         else
             _sr.color = _defaultColor;
@@ -82,7 +82,7 @@ public class Player : MonoBehaviour
         Quaternion targetQuaternion = Quaternion.Euler(new Vector3(0, 0, TargetAngle));
 
         //Rotate player towards targetQuaternion with the speed of Torque
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetQuaternion, Time.fixedDeltaTime * TORQUE);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetQuaternion, Time.fixedUnscaledDeltaTime * TORQUE);
 
         //This if statement prevents player from moving when near pointer
         if (Vector3.Distance(transform.position, MousePosition) > 0.5f || IsDashing)
@@ -92,7 +92,7 @@ public class Player : MonoBehaviour
             //Timer for dashing. Change speed while dashing.
             if (IsDashing)
             {
-                speed = Mathf.Max(speed, DASH_SPEED * Mathf.Sqrt(_dashTime / DASH_TIME));
+                speed = Mathf.Max(0, DASH_SPEED * Mathf.Sqrt(_dashTime / DASH_TIME));
             }
 
             _rb2d.velocity = transform.right * speed;

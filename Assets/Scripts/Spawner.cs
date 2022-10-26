@@ -29,7 +29,7 @@ public class Spawner : MonoBehaviour
             if (EnemyCount < Mathf.Sqrt(GameManager.Instance.Score * 5) + 5)
                 StartCoroutine(Spawn(_enemy));
 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.2f);
         }
     }
 
