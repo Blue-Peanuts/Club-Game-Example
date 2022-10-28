@@ -84,8 +84,11 @@ public class Player : MonoBehaviour
         //Rotate player towards targetQuaternion with the speed of Torque
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetQuaternion, Time.fixedUnscaledDeltaTime * TORQUE);
 
+        if (IsDashing)
+            transform.rotation = targetQuaternion;
+
         //This if statement prevents player from moving when near pointer
-        if (Vector3.Distance(transform.position, MousePosition) > 0.5f || IsDashing)
+        if (Vector3.Distance(transform.position, MousePosition) > 0.5f)
         {
             float speed = SPEED;
             
@@ -115,7 +118,8 @@ public class Player : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!IsInvincible && collision.collider.CompareTag("Enemy"))
+        if ((!IsInvincible && collision.collider.CompareTag("Enemy")) 
+            || collision.collider.CompareTag("Projectile"))
             Death();
     }
 

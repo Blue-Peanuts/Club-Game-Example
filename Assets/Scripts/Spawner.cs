@@ -15,35 +15,58 @@ public class Spawner : MonoBehaviour
     private int EnemyCount => GameObject.FindGameObjectsWithTag("Enemy").Length + _preparing;
 
     [SerializeField] GameObject _spawnTellPrefab;
+    [SerializeField] GameObject _spawnTellProjectilePrefab;
     [SerializeField] GameObject _enemy;
+    [SerializeField] GameObject _projectile;
 
     private void Start()
     {
         StartCoroutine(SpawnLoop());
+        StartCoroutine(ProjectileLoop());
     }
 
     private IEnumerator SpawnLoop()
     {
         while (true)
         {
-            if (EnemyCount < Mathf.Sqrt(GameManager.Instance.Score * 5) + 5)
-                StartCoroutine(Spawn(_enemy));
-
+            if (EnemyCount < Mathf.Sqrt(GameManager.Instance.Score) + 5)
+            {
+                StartCoroutine(Spawn(_enemy, true));
+            }
             yield return new WaitForSeconds(0.2f);
         }
     }
+    private IEnumerator ProjectileLoop()
+    {
+        while (true)
+        {
+            if (GameManager.Instance.Score >= 10)
+            {
+                StartCoroutine(Spawn(_projectile, false));
+                yield return new WaitForSeconds(10 / Mathf.Max(1, Mathf.Sqrt(GameManager.Instance.Score - 5)));
+            }
+            yield return new WaitForSeconds(0.1f);
 
-    private IEnumerator Spawn(GameObject enemy)
+        }
+    }
+
+    private IEnumerator Spawn(GameObject enemy, bool isEnemy)
     {
         Vector3 spawnPoint = GetSpawnPoint();
 
         //tell
-        Destroy(Instantiate(_spawnTellPrefab, spawnPoint, Quaternion.identity), SPAWN_TELL_TIME);
-        _preparing++;
+        if(isEnemy)
+            Destroy(Instantiate(_spawnTellPrefab, spawnPoint, Quaternion.identity), SPAWN_TELL_TIME);
+        else
+            Destroy(Instantiate(_spawnTellProjectilePrefab, spawnPoint, Quaternion.identity), SPAWN_TELL_TIME);
+
+        if (isEnemy)
+            _preparing++;
 
         yield return new WaitForSeconds(SPAWN_TELL_TIME);
 
-        _preparing--;
+        if(isEnemy)
+            _preparing--;
         Instantiate(enemy, spawnPoint, Quaternion.identity);
         
     }
