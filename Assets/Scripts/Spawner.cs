@@ -29,7 +29,7 @@ public class Spawner : MonoBehaviour
     {
         while (true)
         {
-            if (EnemyCount < Mathf.Sqrt(GameManager.Instance.Score) + 5)
+            if (EnemyCount < Mathf.Sqrt(GameManager.Instance.Score * 2) + 5)
             {
                 StartCoroutine(Spawn(_enemy, true));
             }
@@ -40,13 +40,8 @@ public class Spawner : MonoBehaviour
     {
         while (true)
         {
-            if (GameManager.Instance.Score >= 10)
-            {
-                StartCoroutine(Spawn(_projectile, false));
-                yield return new WaitForSeconds(10 / Mathf.Max(1, Mathf.Sqrt(GameManager.Instance.Score - 5)));
-            }
-            yield return new WaitForSeconds(0.1f);
-
+            StartCoroutine(Spawn(_projectile, false));
+            yield return new WaitForSeconds(10 / Mathf.Max(1, Mathf.Sqrt(GameManager.Instance.Score)));
         }
     }
 

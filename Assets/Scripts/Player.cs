@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
     public static Player Instance;
 
     const float SPEED = 10;
-    const float TORQUE = 1080;
+    const float TORQUE = 720;
     const float DASH_TIME = 0.5f;
     const float DASH_SPEED = 50f;
     const float DASH_COOLDOWN = 2;
@@ -47,11 +47,13 @@ public class Player : MonoBehaviour
     private void Update()
     {
         if (IsDashing)
-            _trail.startColor = _trail.endColor = _sr.color = Color.Lerp(_defaultColor, _dashColor, _dashTime / DASH_TIME);
+            _trail.startColor = _sr.color = Color.Lerp(_defaultColor, _dashColor, _dashTime / DASH_TIME);
         else if (CanDash)
-            _trail.startColor = _trail.endColor = _sr.color = _dashColor;
+            _trail.startColor = _sr.color = _dashColor;
         else
             _trail.startColor = _trail.endColor = _sr.color = _defaultColor;
+
+        _trail.endColor = Color.black * 0;
 
         //Start dash if input & cooldown is valid
         if (_dashInput && CanDash)
@@ -86,13 +88,11 @@ public class Player : MonoBehaviour
 
         //Rotate player towards targetQuaternion with the speed of Torque
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetQuaternion, Time.fixedUnscaledDeltaTime * TORQUE);
-
+        /*
         if (IsDashing)
-            transform.rotation = targetQuaternion;
+            transform.rotation = targetQuaternion;*/
 
         //This if statement prevents player from moving when near pointer
-        if (Vector3.Distance(transform.position, MousePosition) > 0.5f)
-        {
             float speed = SPEED;
             
             //Timer for dashing. Change speed while dashing.
@@ -102,9 +102,6 @@ public class Player : MonoBehaviour
             }
 
             _rb2d.velocity = transform.right * speed;
-        }
-        else
-            _rb2d.velocity *= 0;
 
         _dashTime -= Time.fixedDeltaTime;
         _invincibilityTime -= Time.fixedDeltaTime;
@@ -129,6 +126,6 @@ public class Player : MonoBehaviour
 
     private void Death()
     {
-        print("player dead");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 }
