@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
     
     [SerializeField] ParticleSystem _dashParticle;
     [SerializeField] ParticleSystem _chargedParticle;
+    [SerializeField] TrailRenderer _trail;
     [SerializeField] Color _defaultColor;
     [SerializeField] Color _dashColor;
 
@@ -45,10 +46,12 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (CanDash)
-            _sr.color = _dashColor;
+        if (IsDashing)
+            _trail.startColor = _trail.endColor = _sr.color = Color.Lerp(_defaultColor, _dashColor, _dashTime / DASH_TIME);
+        else if (CanDash)
+            _trail.startColor = _trail.endColor = _sr.color = _dashColor;
         else
-            _sr.color = _defaultColor;
+            _trail.startColor = _trail.endColor = _sr.color = _defaultColor;
 
         //Start dash if input & cooldown is valid
         if (_dashInput && CanDash)
