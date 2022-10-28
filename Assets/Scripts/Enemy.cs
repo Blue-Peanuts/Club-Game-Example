@@ -8,12 +8,17 @@ public class Enemy : MonoBehaviour
     [SerializeField] GameObject _deathParticlePrefab;
 
     private Rigidbody2D _rb2d;
-    private Vector2 DirToPlayer => (Player.Instance.transform.position - transform.position).normalized;
+    private float DistanceToPlayer => Vector3.Distance(Player.Instance.transform.position, transform.position);
+    private Vector2 DirToPlayer => (Player.Instance.transform.position + (Vector3)_targetOffset * DistanceToPlayer / 2 - transform.position).normalized;
 
+    private float _speedMul = 0;
+    private Vector2 _targetOffset = Vector2.zero;
 
     private void Start()
     {
         _rb2d = GetComponent<Rigidbody2D>();
+        _speedMul = Random.Range(0.5f, 1f);
+        _targetOffset = Random.insideUnitCircle.normalized;
     }
 
     private void Update()
@@ -23,7 +28,7 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rb2d.velocity = DirToPlayer * SPEED;
+        _rb2d.velocity = DirToPlayer * SPEED * _speedMul;
     }
 
     public void Death()

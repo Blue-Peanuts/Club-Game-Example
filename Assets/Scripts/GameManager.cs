@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
     const float COMBO_TIME = 1f;
     const float COMBO_SCALE = 0.25f;
     const float HIT_STOP_TIME = 0.02f;
-    const float HIT_STOP_SCALE = 0.02f;
+    const float HIT_STOP_SCALE = 0.05f;
 
     public static GameManager Instance;
 
