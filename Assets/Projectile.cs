@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    const float SPEED = 5;
+    const float SPEED = 3;
     const float ROTATE_SPEED = 360;
     private Vector2 DirToPlayer => (Player.Instance.transform.position - transform.position).normalized;
     private Rigidbody2D _rb2d;
@@ -14,7 +14,7 @@ public class Projectile : MonoBehaviour
     {
         _rb2d = GetComponent<Rigidbody2D>();
         _originalDir = DirToPlayer;
-        Destroy(gameObject, 10);
+        Destroy(gameObject, 20);
     }
     private void Update()
     {
