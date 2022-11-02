@@ -11,6 +11,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: TellParticle Projectile
       objectReference: {fileID: 0}
+    - target: {fileID: 5060508633049391922, guid: b89e7c00b19946047aa9a76b1cbbf7fe, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.a
+      value: 0.5019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 5060508633049391922, guid: b89e7c00b19946047aa9a76b1cbbf7fe, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.41568628
+      objectReference: {fileID: 0}
+    - target: {fileID: 5060508633049391922, guid: b89e7c00b19946047aa9a76b1cbbf7fe, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5060508633049391922, guid: b89e7c00b19946047aa9a76b1cbbf7fe, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8692230674871020901, guid: b89e7c00b19946047aa9a76b1cbbf7fe, type: 3}
       propertyPath: m_RootOrder
       value: 0
