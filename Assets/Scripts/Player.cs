@@ -77,8 +77,6 @@ public class Player : MonoBehaviour
         _dashCooldown = DASH_COOLDOWN;
         _invincibilityTime = DASH_TIME + INVINCIBILITY_BONUS;
         _dashParticle.Play();
-        //Instant steering. For more player control
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, TargetAngle));
     }
 
     private void FixedUpdate()
@@ -87,7 +85,7 @@ public class Player : MonoBehaviour
         Quaternion targetQuaternion = Quaternion.Euler(new Vector3(0, 0, TargetAngle));
 
         //Rotate player towards targetQuaternion with the speed of Torque
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetQuaternion, Time.fixedUnscaledDeltaTime * TORQUE);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetQuaternion, Time.fixedUnscaledDeltaTime * TORQUE * (IsDashing? 2 : 1));
         /*
         if (IsDashing)
             transform.rotation = targetQuaternion;*/
@@ -98,7 +96,7 @@ public class Player : MonoBehaviour
             //Timer for dashing. Change speed while dashing.
             if (IsDashing)
             {
-                speed = Mathf.Max(0, DASH_SPEED * Mathf.Sqrt(_dashTime / DASH_TIME));
+                speed = Mathf.Max(0, DASH_SPEED * _dashTime / DASH_TIME);
             }
 
             _rb2d.velocity = transform.right * speed;

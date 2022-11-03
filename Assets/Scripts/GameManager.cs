@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     private ColorGrading cd;
     private LensDistortion ld;
     private ChromaticAberration ca;
+    private Vignette vi;
 
     void Awake()
     {
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
         _ppv.profile.TryGetSettings<ColorGrading>(out cd);
         _ppv.profile.TryGetSettings<LensDistortion>(out ld);
         _ppv.profile.TryGetSettings<ChromaticAberration>(out ca);
+        _ppv.profile.TryGetSettings<Vignette>(out vi);
     }
 
     private void Update()
@@ -37,6 +39,7 @@ public class GameManager : MonoBehaviour
         cd.saturation.value = -20 * (_comboTime / COMBO_TIME);
         cd.temperature.value = -10 * (_comboTime / COMBO_TIME);
         ld.intensity.value = -10 * (_comboTime / COMBO_TIME);
+        vi.intensity.value = 0.5f * (_comboTime / COMBO_TIME);
         ca.enabled.value = (_comboTime > 0);
         if (_comboTime > 0)
         {
