@@ -1,6 +1,6 @@
 using UnityEngine;
 using TMPro;
-
+using UnityEngine.Rendering.PostProcessing;
 public class GameManager : MonoBehaviour
 {
     const float COMBO_TIME = 1f;
@@ -17,24 +17,47 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI _scoreText;
 
+    private PostProcessVolume _ppv;
+    private ColorGrading cd;
+    private LensDistortion ld;
+    private ChromaticAberration ca;
+
     void Awake()
     {
         Instance = this;
+        _ppv = GetComponent<PostProcessVolume>();
+        _ppv.profile.TryGetSettings<ColorGrading>(out cd);
+        _ppv.profile.TryGetSettings<LensDistortion>(out ld);
+        _ppv.profile.TryGetSettings<ChromaticAberration>(out ca);
     }
 
     private void Update()
     {
-        if (_comboTime > COMBO_TIME)
-            Time.timeScale = HIT_STOP_SCALE;
-        else if (_comboTime > 0)
-            Time.timeScale = COMBO_SCALE + (1 - COMBO_SCALE) * (COMBO_TIME - _comboTime);
+        cd.contrast.value = 5 * (_comboTime / COMBO_TIME);
+        cd.saturation.value = -20 * (_comboTime / COMBO_TIME);
+        cd.temperature.value = -10 * (_comboTime / COMBO_TIME);
+        ld.intensity.value = -10 * (_comboTime / COMBO_TIME);
+        ca.enabled.value = (_comboTime > 0);
+        if (_comboTime > 0)
+        {
+            if (_comboTime > COMBO_TIME)
+                Time.timeScale = HIT_STOP_SCALE;
+            else
+                Time.timeScale = COMBO_SCALE + (1 - COMBO_SCALE) * (COMBO_TIME - _comboTime);
+        }
         else
+        {
             Time.timeScale = 1;
+        }
         _comboTime -= Time.unscaledDeltaTime;
+        _comboTime = Mathf.Max(0, _comboTime);
+
+        transform.position = Vector3.Lerp(transform.position, new Vector3(0, 0, -10), Time.unscaledDeltaTime);
     }
 
     public void HitStop()
     {
+        transform.position += (Vector3)Random.insideUnitCircle.normalized * 0.1f;
         _comboTime = COMBO_TIME + HIT_STOP_TIME;
     }
 
