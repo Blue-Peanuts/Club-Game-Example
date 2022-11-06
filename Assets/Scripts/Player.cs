@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     const float SPEED = 10;
     const float TORQUE = 720;
     const float DASH_TIME = 0.5f;
-    const float DASH_SPEED = 50f;
+    const float DASH_SPEED = 60f;
     const float DASH_COOLDOWN = 2;
     const float INVINCIBILITY_BONUS = 0.25f;
 
@@ -47,7 +47,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
         if (IsDashing)
-            _trail.startColor = _sr.color = Color.Lerp(_defaultColor, _dashColor, _dashTime / DASH_TIME);
+            _trail.startColor = _sr.color = Color.Lerp(_defaultColor, _dashColor, Mathf.Sqrt(_dashTime / DASH_TIME));
         else if (CanDash)
             _trail.startColor = _sr.color = _dashColor;
         else

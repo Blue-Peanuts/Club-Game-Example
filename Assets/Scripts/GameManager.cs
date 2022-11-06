@@ -18,29 +18,29 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _scoreText;
 
     private PostProcessVolume _ppv;
-    private ColorGrading cd;
-    private LensDistortion ld;
-    private ChromaticAberration ca;
-    private Vignette vi;
+    private ColorGrading _cd;
+    private LensDistortion _ld;
+    private ChromaticAberration _ca;
+    private Vignette _vi;
 
     void Awake()
     {
         Instance = this;
         _ppv = GetComponent<PostProcessVolume>();
-        _ppv.profile.TryGetSettings<ColorGrading>(out cd);
-        _ppv.profile.TryGetSettings<LensDistortion>(out ld);
-        _ppv.profile.TryGetSettings<ChromaticAberration>(out ca);
-        _ppv.profile.TryGetSettings<Vignette>(out vi);
+        _ppv.profile.TryGetSettings<ColorGrading>(out _cd);
+        _ppv.profile.TryGetSettings<LensDistortion>(out _ld);
+        _ppv.profile.TryGetSettings<ChromaticAberration>(out _ca);
+        _ppv.profile.TryGetSettings<Vignette>(out _vi);
     }
 
     private void Update()
     {
-        cd.contrast.value = 5 * (_comboTime / COMBO_TIME);
-        cd.saturation.value = -20 * (_comboTime / COMBO_TIME);
-        cd.temperature.value = -10 * (_comboTime / COMBO_TIME);
-        ld.intensity.value = -10 * (_comboTime / COMBO_TIME);
-        vi.intensity.value = 0.5f * (_comboTime / COMBO_TIME);
-        ca.enabled.value = (_comboTime > 0);
+        _cd.contrast.value = 5 * Mathf.Sqrt(_comboTime / COMBO_TIME);
+        _cd.saturation.value = -20 * Mathf.Sqrt(_comboTime / COMBO_TIME);
+        _cd.temperature.value = -10 * Mathf.Sqrt(_comboTime / COMBO_TIME);
+        _ld.intensity.value = -10 * Mathf.Sqrt(_comboTime / COMBO_TIME);
+        _vi.intensity.value = 0.5f * Mathf.Sqrt(_comboTime / COMBO_TIME);
+        _ca.enabled.value = (_comboTime > 0);
         if (_comboTime > 0)
         {
             if (_comboTime > COMBO_TIME)
